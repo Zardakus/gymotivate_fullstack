@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_01_025454) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_03_013920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "gyms", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -22,7 +29,26 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_025454) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.integer "role"
+    t.bigint "gym_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["gym_id"], name: "index_users_on_gym_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "workouts", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "trainer_id", null: false
+    t.bigint "member_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_workouts_on_member_id"
+    t.index ["trainer_id"], name: "index_workouts_on_trainer_id"
+  end
+
+  add_foreign_key "users", "gyms"
+  add_foreign_key "workouts", "users", column: "member_id"
+  add_foreign_key "workouts", "users", column: "trainer_id"
 end
