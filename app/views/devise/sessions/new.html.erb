@@ -1,0 +1,62 @@
+<div class="w-full max-w-md mx-auto bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
+
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-extrabold text-white tracking-tight">
+      Gymotivate
+    </h2>
+    <p class="text-gray-400 mt-2 text-sm">
+      Acesse sua conta para continuar
+    </p>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+
+    <div>
+      <%= f.label :email, "E-mail", class: "block text-gray-300 text-sm font-semibold mb-2" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "seu@email.com", class: "w-full px-4 py-3 bg-gray-900 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors" %>
+    </div>
+
+    <div data-controller="password-visibility">
+      <%= f.label :password, "Senha", class: "block text-gray-300 text-sm font-semibold mb-2" %>
+
+      <div class="relative">
+        <%= f.password_field :password,
+              autocomplete: "current-password",
+              placeholder: "••••••••",
+              data: { password_visibility_target: "input" },
+              class: "w-full px-4 py-3 bg-gray-900 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors" %>
+
+        <button type="button"
+                data-action="click->password-visibility#toggle"
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-green-500 focus:outline-none transition-colors">
+          <span data-password-visibility-target="icon" class="text-sm font-medium">Mostrar</span>
+        </button>
+      </div>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="flex items-center">
+        <%= f.check_box :remember_me, class: "h-4 w-4 text-green-500 bg-gray-900 border-gray-600 rounded focus:ring-green-500 focus:ring-offset-gray-800" %>
+        <%= f.label :remember_me, "Lembrar de mim", class: "ml-2 block text-sm text-gray-400 cursor-pointer" %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.submit "Entrar", class: "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 cursor-pointer shadow-lg shadow-green-900/50" %>
+    </div>
+  <% end %>
+
+  <div class="mt-8 pt-6 border-t border-gray-700 flex flex-col items-center space-y-3">
+    <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+      <%= link_to "Esqueceu sua senha?", new_password_path(resource_name), class: "text-sm text-green-500 hover:text-green-400 font-medium transition-colors" %>
+    <% end %>
+
+    <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+      <div class="text-sm text-gray-400">
+        Ainda não tem uma conta?
+        <%= link_to "Cadastre-se", new_registration_path(resource_name), class: "text-white hover:text-green-400 font-medium transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
