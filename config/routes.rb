@@ -12,4 +12,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # Define a tela principal do sistema
+  root "workouts#index"
+
+  # Cria todas as 7 rotas RESTful para treinos
+  resources :workouts
 end

@@ -1,0 +1,42 @@
+<div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-lg shadow border border-gray-200">
+  <h1 class="text-2xl font-bold mb-6 text-gray-900">Nova Ficha de Treino</h1>
+
+  <%= form_with model: @workout, class: "space-y-6" do |form| %>
+
+    <% if @workout.errors.any? %>
+      <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+        <ul class="text-red-700 text-sm list-disc pl-5">
+          <% @workout.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :title, "Título do Treino", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.text_field :title, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :description, "Descrição (Exercícios)", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.text_area :description, rows: 4, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= form.label :trainer_id, "Professor Responsável", class: "block text-sm font-bold text-gray-900 mb-1" %>
+        <%= form.collection_select :trainer_id, User.all, :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
+      </div>
+      <div>
+        <%= form.label :member_id, "Aluno (Executante)", class: "block text-sm font-bold text-gray-900 mb-1" %>
+        <%= form.collection_select :member_id, User.all, :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
+      </div>
+    </div>
+
+    <div class="pt-6 flex justify-end space-x-3">
+      <%= link_to "Cancelar", root_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-2 px-6 rounded border border-gray-300" %>
+      <%= form.submit "Salvar Ficha", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

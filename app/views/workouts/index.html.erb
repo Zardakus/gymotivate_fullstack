@@ -1,0 +1,51 @@
+<div class="max-w-4xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Fichas de Treino</h1>
+
+    <% if policy(Workout).create? %>
+      <%= link_to "Nova Ficha de Treino", new_workout_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <% end %>
+  </div>
+
+  <% if notice.present? %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <div class="bg-white shadow overflow-hidden sm:rounded-md p-4">
+    <% if @workouts.any? %>
+      <ul role="list" class="divide-y divide-gray-200">
+        <% @workouts.each do |workout| %>
+          <li class="py-4">
+            <div class="flex justify-between space-x-3">
+              <div class="flex-1 space-y-1">
+                <h3 class="text-lg font-bold text-gray-900"><%= workout.title %></h3>
+                <p class="text-sm text-gray-600"><%= workout.description %></p>
+                <div class="mt-2 text-sm text-gray-500 flex gap-4">
+                  <span><strong class="text-gray-700">Professor:</strong> <%= workout.trainer.email %></span>
+                  <span><strong class="text-gray-700">Aluno:</strong> <%= workout.member.email %></span>
+                </div>
+              </div>
+
+              <div class="flex flex-col space-y-2 text-right">
+                <% if policy(workout).edit? %>
+                  <button class="text-blue-600 hover:text-blue-900 text-sm font-medium">Editar</button>
+                <% end %>
+                <% if policy(workout).destroy? %>
+                  <button class="text-red-600 hover:text-red-900 text-sm font-medium">Excluir</button>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-center text-gray-500 py-8">Nenhuma ficha de treino cadastrada ainda.</p>
+    <% end %>
+  </div>
+
+  <div class="mt-8 text-center">
+    <%= button_to "Sair do Sistema", destroy_user_session_path, method: :delete, class: "text-red-600 hover:underline" %>
+  </div>
+</div>
