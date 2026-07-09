@@ -16,32 +16,38 @@
   <div class="bg-white shadow overflow-hidden sm:rounded-md p-4">
     <% if @workouts.any? %>
       <ul role="list" class="divide-y divide-gray-200">
+
         <% @workouts.each do |workout| %>
-          <li id="<%= dom_id(workout) %>" class="py-4">
-            <div class="flex justify-between space-x-3">
-              <div class="flex-1 space-y-1">
-                <h3 class="text-lg font-bold text-gray-900"><%= workout.title %></h3>
-                <p class="text-sm text-gray-600"><%= workout.description %></p>
-                <div class="mt-2 text-sm text-gray-500 flex gap-4">
-                  <span><strong class="text-gray-700">Professor:</strong> <%= workout.trainer.email %></span>
-                  <span><strong class="text-gray-700">Aluno:</strong> <%= workout.member.email %></span>
+          <li class="py-4">
+
+            <%= turbo_frame_tag dom_id(workout) do %>
+              <div class="flex justify-between space-x-3">
+                <div class="flex-1 space-y-1">
+                  <h3 class="text-lg font-bold text-gray-900"><%= workout.title %></h3>
+                  <p class="text-sm text-gray-600"><%= workout.description %></p>
+                  <div class="mt-2 text-sm text-gray-500 flex gap-4">
+                    <span><strong class="text-gray-700">Professor:</strong> <%= workout.trainer.email %></span>
+                    <span><strong class="text-gray-700">Aluno:</strong> <%= workout.member.email %></span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col space-y-2 text-right">
+                  <% if policy(workout).edit? %>
+                    <%= link_to "Editar", edit_workout_path(workout), class: "text-blue-600 hover:text-blue-900 text-sm font-medium" %>
+                  <% end %>
+
+                  <% if policy(workout).destroy? %>
+                    <%= link_to "Excluir", workout_path(workout),
+                                data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir esta ficha?" },
+                                class: "text-red-600 hover:text-red-900 text-sm font-medium" %>
+                  <% end %>
                 </div>
               </div>
+            <% end %>
 
-              <div class="flex flex-col space-y-2 text-right">
-                <% if policy(workout).edit? %>
-                  <button class="text-blue-600 hover:text-blue-900 text-sm font-medium">Editar</button>
-                <% end %>
-
-                <% if policy(workout).destroy? %>
-                  <%= link_to "Excluir", workout_path(workout),
-                              data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir esta ficha?" },
-                              class: "text-red-600 hover:text-red-900 text-sm font-medium" %>
-                <% end %>
-              </div>
-            </div>
           </li>
         <% end %>
+
       </ul>
     <% else %>
       <p class="text-center text-gray-500 py-8">Nenhuma ficha de treino cadastrada ainda.</p>

@@ -1,6 +1,6 @@
 class WorkoutsController < ApplicationController
 # Executa o método set_workout para carregar a ficha antes de rodar as ações específicas
-before_action :set_workout, only: [:destroy]
+before_action :set_workout, only: [:edit, :update, :destroy]
 
   def index
     # Usando Eager Loading (includes) para matar o problema de N+1 queries
@@ -23,6 +23,19 @@ before_action :set_workout, only: [:destroy]
       redirect_to root_path, notice: "Ficha de treino criada com sucesso!"
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    authorize @workout
+  end
+
+  def update
+    authorize @workout
+    if @workout.update(workout_params)
+      redirect_to root_path, notice: "Ficha de treino atualizada com sucesso!"
+    else
+      reder :edit, status: :unprocessable_entity
     end
   end
 
