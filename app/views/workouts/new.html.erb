@@ -26,11 +26,11 @@
     <div class="grid grid-cols-2 gap-4">
       <div>
         <%= form.label :trainer_id, "Professor Responsável", class: "block text-sm font-bold text-gray-900 mb-1" %>
-        <%= form.collection_select :trainer_id, User.all, :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
+        <%= form.collection_select :trainer_id, current_user.gym.users.where(role: :trainer), :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
       </div>
       <div>
         <%= form.label :member_id, "Aluno (Executante)", class: "block text-sm font-bold text-gray-900 mb-1" %>
-        <%= form.collection_select :member_id, User.all, :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
+        <%= form.collection_select :member_id, current_user.gym.users.where(role: :member), :id, :email, { prompt: "Selecione..." }, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
       </div>
     </div>
 
