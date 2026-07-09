@@ -1,22 +1,21 @@
 class WorkoutsController < ApplicationController
-# Executa o método set_workout para carregar a ficha antes de rodar as ações específicas
-before_action :set_workout, only: [:edit, :update, :destroy]
+  before_action :set_workout, only: [:edit, :update, :destroy]
 
   def index
-    # Usando Eager Loading (includes) para matar o problema de N+1 queries
-    @workouts = Workout.includes(:trainer, :member).all
-    # O Pundit vai lá na WorkoutPolicy verificar o método index?
+    # 1. Vazamento resolvido: Lista apenas os treinos da academia do usuário logado
+    @workouts = current_user.gym.workouts.includes(:trainer, :member)
     authorize Workout
   end
 
   def new
-    @workout = Workout.new
-    # O Pundit vai barrar os alunos aqui antes mesmo da tela carregar
+    # 2. Já cria um treino em memória associado à academia correta
+    @workout = current_user.gym.workouts.build
     authorize @workout
   end
 
   def create
-    @workout = Workout.new(workout_params)
+    # 3. O servidor (e não o HTML) injeta de forma segura o gym_id no novo treino
+    @workout = current_user.gym.workouts.build(workout_params)
     authorize @workout
 
     if @workout.save
@@ -32,10 +31,11 @@ before_action :set_workout, only: [:edit, :update, :destroy]
 
   def update
     authorize @workout
+
     if @workout.update(workout_params)
-      redirect_to root_path, notice: "Ficha de treino atualizada com sucesso!"
+      redirect_to root_path
     else
-      reder :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -43,21 +43,22 @@ before_action :set_workout, only: [:edit, :update, :destroy]
     authorize @workout
     @workout.destroy
 
-    # Respondemos dizendo ao Rails para procurar um arquivo de fluxo ou rodar inline
     respond_to do |format|
       format.html { redirect_to root_path, notice: "Treino removido." }
-      # Se a requisição for do Turbo, ele executa essa linha:
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(helpers.dom_id(@workout))}
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(helpers.dom_id(@workout)) }
     end
   end
 
   private
 
   def set_workout
-    @workout = Workout.find(params[:id])
+    # 4. Falha IDOR resolvida: Tenta encontrar o ID do treino APENAS dentro da academia do usuário!
+    # Se ele tentar acessar o ID de um treino de outra academia, o Rails lança um erro 404 (RecordNotFound)
+    @workout = current_user.gym.workouts.find(params[:id])
   end
 
   def workout_params
-    params.require(:workout).permit(:name, :description, :trainer_id, :member_id)
+    # Note que NÃO permitimos o :gym_id aqui. O usuário jamais pode escolher ou forjar a academia no HTML.
+    params.require(:workout).permit(:title, :description, :trainer_id, :member_id)
   end
 end

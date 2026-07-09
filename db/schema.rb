@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_03_013920) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_09_011847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,11 +44,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_03_013920) do
     t.bigint "member_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "gym_id", null: false
+    t.index ["gym_id"], name: "index_workouts_on_gym_id"
     t.index ["member_id"], name: "index_workouts_on_member_id"
     t.index ["trainer_id"], name: "index_workouts_on_trainer_id"
   end
 
   add_foreign_key "users", "gyms"
+  add_foreign_key "workouts", "gyms"
   add_foreign_key "workouts", "users", column: "member_id"
   add_foreign_key "workouts", "users", column: "trainer_id"
 end
