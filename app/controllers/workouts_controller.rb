@@ -3,13 +3,15 @@ class WorkoutsController < ApplicationController
 
   def index
     # 1. Vazamento resolvido: Lista apenas os treinos da academia do usuário logado
-    @workouts = current_user.gym.workouts.includes(:trainer, :member)
+    @workouts = current_user.gym.workouts.includes(:trainer, :member, :exercises)
     authorize Workout
   end
 
   def new
     # 2. Já cria um treino em memória associado à academia correta
     @workout = current_user.gym.workouts.build
+    # Cria 3 espaços vazios na memória para o formulário renderizar os campos
+    3.times { @workout.exercises.build }
     authorize @workout
   end
 
@@ -59,6 +61,12 @@ class WorkoutsController < ApplicationController
 
   def workout_params
     # Note que NÃO permitimos o :gym_id aqui. O usuário jamais pode escolher ou forjar a academia no HTML.
-    params.require(:workout).permit(:title, :description, :trainer_id, :member_id)
+    params.require(:workout).permit(
+      :title,
+      :description,
+      :trainer_id,
+      :member_id,
+      exercises_attributes: [:id, :name, :sets, :reps, :_destroy]
+    )
   end
 end
