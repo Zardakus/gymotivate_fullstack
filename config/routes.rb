@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard/index"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -15,7 +16,7 @@ Rails.application.routes.draw do
 
   # Define a tela principal do sistema
   root "workouts#index"
-
+  get "dashboard", to: "dashboard#index"
   # Cria todas as 7 rotas RESTful para treinos
   resources :workouts
 end
