@@ -2,8 +2,16 @@ class WorkoutsController < ApplicationController
   before_action :set_workout, only: [:edit, :update, :destroy]
 
   def index
-    # 1. Vazamento resolvido: Lista apenas os treinos da academia do usuário logado
-    @workouts = current_user.gym.workouts.includes(:trainer, :member, :exercises)
+    # 1. Prepara a base (Sem rodar o SQL ainda) ordenada pelos mais recentes
+    base_query =  current_user.gym.workouts.includes(:trainer, :member, :exercises).order(created_at: :desc)
+
+    # 2. Se o usuário digitou algo na busca, adicionamos o filtro WHERE ILIKE (PostgreSQL)
+    if params[:query].present?
+      base_query = base_query.where("workouts.title ILIKE :search OR workouts.description ILIKE :search", search: "%#{params[:query]}%")
+    end
+
+    # 3. O Pagy assume o controle: Ele conta o total, aplica LIMIT e OFFSET e dispara o SQL no banco
+    @pagy, @workouts = pagy(base_query)
     authorize Workout
   end
 
