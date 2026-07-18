@@ -60,3 +60,5 @@ end
 gem 'devise'
 gem 'pundit'
 gem 'pagy'
+
+gem 'prawn'

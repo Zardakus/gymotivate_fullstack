@@ -21,7 +21,8 @@
       </div>
 
       <div class="flex justify-end space-x-2 pt-2">
-        <%= link_to "Cancelar", root_path, class: "text-gray-600 hover:text-gray-900 text-sm font-bold py-1 px-3" %>
+        <!-- O data-turbo-frame="_top" força o navegador a recarregar a página inteira, saindo do modo de edição -->
+        <%= link_to "Cancelar", request.referer || root_path, data: { turbo_frame: "_top" }, class: "text-gray-600 hover:text-gray-900 text-sm font-bold py-1 px-3" %>
         <%= form.submit "Atualizar", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-4 rounded cursor-pointer" %>
       </div>
     <% end %>

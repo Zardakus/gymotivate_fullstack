@@ -1,5 +1,5 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: [:edit, :update, :destroy]
+  before_action :set_workout, only: [:show, :edit, :update, :destroy]
 
   def index
     # 1. Prepara a base (Sem rodar o SQL ainda) ordenada pelos mais recentes
@@ -13,6 +13,53 @@ class WorkoutsController < ApplicationController
     # 3. O Pagy assume o controle: Ele conta o total, aplica LIMIT e OFFSET e dispara o SQL no banco
     @pagy, @workouts = pagy(base_query)
     authorize Workout
+  end
+
+  def show
+    authorize @workout
+
+    respond_to do |format|
+      # Quando o usuário clicar no link, o Rails vai ler a URL pedindo o formato ".pdf"
+      format.pdf do
+        # Inicia um documento em branco
+        pdf = Prawn::Document.new
+
+        # Cabeçalho
+        pdf.text "GYMOTIVATE", size: 28, style: :bold, align: :center
+        pdf.move_down 5
+        pdf.text current_user.gym.name, size: 14, align: :center, color: "666666"
+        pdf.move_down 20
+        pdf.stroke_horizontal_rule
+        pdf.move_down 20
+
+        # Dados do Treino
+        pdf.text "Ficha: #{@workout.title}", size: 18, style: :bold
+        pdf.text "Objetivo: #{@workout.description}", size: 12
+        pdf.move_down 10
+        pdf.text "Professor Responsável: #{@workout.trainer.name || @workout.trainer.email}", size: 12
+        pdf.text "Aluno Executante: #{@workout.member.name || @workout.member.email}", size: 12
+        pdf.move_down 20
+
+        # Tabela de Exercícios (Desenhada linha a linha)
+        pdf.text "Lista de Exercícios:", size: 14, style: :bold
+        pdf.move_down 10
+
+        @workout.exercises.each do |exercise|
+          peso_info = exercise.weight.present? ? "Carga: #{exercise.weight}" : "Carga: Livre"
+          pdf.text "• #{exercise.name}  |  #{exercise.sets}x#{exercise.reps}  |  #{peso_info}", size: 12
+          pdf.move_down 5
+        end
+
+        pdf.move_down 30
+        pdf.text "Gerado em: #{Time.current.strftime('%d/%m/%Y às %H:%M')}", size: 10, align: :center, color: "999999"
+
+        # Entrega o arquivo desenhado para o navegador do usuário
+        send_data pdf.render,
+                  filename: "treino_#{@workout.id}.pdf",
+                  type: 'application/pdf',
+                  disposition: 'inline' # 'inline' abre no navegador. Use 'attachment' se quiser forçar o download direto.
+      end
+    end
   end
 
   def new

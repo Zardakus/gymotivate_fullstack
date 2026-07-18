@@ -12,7 +12,7 @@ class WorkoutPolicy < ApplicationPolicy
 
   # Quem pode ver uma ficha específica? Todo mundo logado.
   def show?
-    true
+    record.gym_id == user.gym_id
   end
 
   # Quem pode criar? Admins ou Professores.
