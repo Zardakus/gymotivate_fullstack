@@ -23,5 +23,11 @@ module Gymotivate
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # 1. Configura o fuso horário para Brasília (Afeta o created_at do banco e o PDF)
+    config.time_zone = 'Brasilia'
+
+    # 2. Define o idioma padrão da aplicação para Português do Brasil
+    config.i18n.default_locale = :'pt-BR'
   end
 end
