@@ -1,0 +1,45 @@
+<%= form_with model: @user, class: "space-y-6" do |form| %>
+  <% if @user.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+      <ul class="text-red-700 text-sm list-disc pl-5">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= form.label :name, "Nome Completo", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.text_field :name, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :email, "E-mail de Acesso", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.email_field :email, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div>
+      <%= form.label :role, "Papel no Sistema", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.select :role, User.roles.keys.map { |r| [r.titleize, r] }, {}, { class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm px-4 py-2" } %>
+    </div>
+
+    <div>
+      <%= form.label :password, "Senha", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.password_field :password, placeholder: (@user.persisted? ? "Deixe em branco para manter" : "Mínimo 6 caracteres"), class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation, "Confirmar Senha", class: "block text-sm font-bold text-gray-900 mb-1" %>
+      <%= form.password_field :password_confirmation, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
+    </div>
+  </div>
+
+  <div class="pt-6 flex justify-end space-x-3">
+    <%= link_to "Cancelar", users_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-2 px-6 rounded border border-gray-300" %>
+    <%= form.submit "Salvar Usuário", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow cursor-pointer" %>
+  </div>
+<% end %>

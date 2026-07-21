@@ -1,0 +1,50 @@
+<div class="max-w-5xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Gestão de Equipe e Alunos</h1>
+    <%= link_to "Novo Usuário", new_user_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+  <% if notice.present? %>
+    <div data-controller="flash" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm transition-all duration-500">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nome / E-mail</th>
+          <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Papel</th>
+          <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @users.each do |user| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-bold text-gray-900"><%= user.name.presence || "Sem Nome" %></div>
+              <div class="text-sm text-gray-500"><%= user.email %></div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <% badge_color = case user.role
+                               when 'admin' then 'bg-red-100 text-red-800'
+                               when 'trainer' then 'bg-purple-100 text-purple-800'
+                               else 'bg-green-100 text-green-800'
+                               end %>
+              <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full <%= badge_color %> uppercase">
+                <%= user.role %>
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+              <%= link_to "Editar", edit_user_path(user), class: "text-blue-600 hover:text-blue-900" %>
+              <% if policy(user).destroy? %>
+                <%= link_to "Excluir", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Remover este usuário do sistema?" }, class: "text-red-600 hover:text-red-900" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

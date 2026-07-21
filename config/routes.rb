@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   # Define a tela principal do sistema
   root "workouts#index"
   get "dashboard", to: "dashboard#index"
+
+  resources :users, path: 'membros', except: [:show]
+
   # Cria todas as 7 rotas RESTful para treinos
   resources :workouts
 end
