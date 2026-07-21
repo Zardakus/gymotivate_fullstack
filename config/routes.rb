@@ -22,4 +22,6 @@ Rails.application.routes.draw do
 
   # Cria todas as 7 rotas RESTful para treinos
   resources :workouts
+
+  resources :workout_logs, only: [:new, :create]
 end

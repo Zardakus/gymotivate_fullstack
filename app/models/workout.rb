@@ -6,6 +6,8 @@ class Workout < ApplicationRecord
 # 1. Define a relação 1:N (Se apagar o treino, apaga os exercícios)
   has_many :exercises, dependent: :destroy
 
+  has_many :workout_logs, dependent: :destroy
+
   # 2. Habilita o formulário aninhado
   # allow_destroy: true -> Permite deletar um exercício diretamente pela tela de edição do treino
   # reject_if: :all_blank -> Se o usuário deixar os campos do exercício em branco, o sistema ignora em vez de dar erro

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workout_log: one
+  exercise: one
+  actual_reps: MyString
+  actual_weight: MyString
+  completed: false
+
+two:
+  workout_log: two
+  exercise: two
+  actual_reps: MyString
+  actual_weight: MyString
+  completed: false

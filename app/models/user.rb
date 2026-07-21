@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :workouts_as_trainer, class_name: 'Workout', foreign_key: 'trainer_id', dependent: :destroy
   has_many :workouts_as_member, class_name: 'Workout', foreign_key: 'member_id', dependent: :destroy
 
+  has_many :workout_logs, foreign_key: 'member_id', dependent: :destroy
+
   # Nosso sistema de papéis
   enum role: { admin: 0, trainer: 1, member: 2 }
 end

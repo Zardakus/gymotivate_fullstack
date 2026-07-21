@@ -1,0 +1,59 @@
+<div class="max-w-3xl mx-auto mt-6 md:mt-10 mb-20">
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+    <div class="bg-gray-900 px-6 py-5 border-b border-gray-800">
+      <h1 class="text-xl md:text-2xl font-bold text-white">Executar: <%= @workout.title %></h1>
+      <p class="text-gray-400 text-sm mt-1">Anote suas cargas reais e marque o que conseguiu concluir hoje.</p>
+    </div>
+
+    <div class="p-4 md:p-6 bg-gray-50">
+      <%= form_with model: @workout_log, class: "space-y-6" do |form| %>
+        <!-- Precisamos enviar o ID da ficha base de forma oculta -->
+        <%= form.hidden_field :workout_id %>
+
+        <div class="space-y-4">
+          <%= form.fields_for :exercise_logs do |exercise_form| %>
+            <% exercise = exercise_form.object.exercise %>
+            <!-- Envia o ID do exercício de forma oculta para relacionar a resposta -->
+            <%= exercise_form.hidden_field :exercise_id %>
+
+            <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+
+              <!-- Informações do Molde (O que deve ser feito) -->
+              <div class="flex-1 w-full border-b md:border-b-0 md:border-r border-gray-200 pb-3 md:pb-0 md:pr-4">
+                <h3 class="text-lg font-bold text-gray-900"><%= exercise.name %></h3>
+                <p class="text-sm text-gray-500 font-medium mt-1">
+                  Meta: <%= exercise.sets %>x<%= exercise.reps %>
+                  <%= " | Carga: #{exercise.weight}" if exercise.weight.present? %>
+                </p>
+              </div>
+
+              <!-- Campos de Execução (Anotações do Aluno) -->
+              <div class="flex flex-wrap md:flex-nowrap gap-3 items-end w-full md:w-auto">
+                <div class="flex-1 md:w-24">
+                  <%= exercise_form.label :actual_reps, "Reps Feitas", class: "block text-xs font-bold text-gray-700 mb-1" %>
+                  <%= exercise_form.text_field :actual_reps, placeholder: "Ex: 10", class: "block w-full rounded-md border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-2 text-gray-900 bg-blue-50" %>
+                </div>
+
+                <div class="flex-1 md:w-24">
+                  <%= exercise_form.label :actual_weight, "Peso Usado", class: "block text-xs font-bold text-gray-700 mb-1" %>
+                  <%= exercise_form.text_field :actual_weight, placeholder: "Ex: 20kg", class: "block w-full rounded-md border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-2 text-gray-900 bg-blue-50" %>
+                </div>
+
+                <div class="w-full md:w-16 flex flex-col items-center justify-center bg-gray-100 rounded-md py-1 border border-gray-200">
+                  <%= exercise_form.label :completed, "Feito?", class: "block text-[10px] uppercase font-bold text-gray-500 mb-1" %>
+                  <%= exercise_form.check_box :completed, class: "h-6 w-6 text-green-600 focus:ring-green-500 border-gray-400 rounded cursor-pointer" %>
+                </div>
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+
+        <div class="pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3">
+          <%= link_to "Cancelar", root_path, class: "text-center bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-3 px-6 rounded border border-gray-300 transition-colors" %>
+          <%= form.submit "Finalizar Treino", class: "w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow cursor-pointer text-lg transition-colors" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

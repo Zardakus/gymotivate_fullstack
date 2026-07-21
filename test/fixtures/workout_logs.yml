@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workout: one
+  member: one
+  started_at: 2026-07-21 01:29:09
+  completed_at: 2026-07-21 01:29:09
+
+two:
+  workout: two
+  member: two
+  started_at: 2026-07-21 01:29:09
+  completed_at: 2026-07-21 01:29:09

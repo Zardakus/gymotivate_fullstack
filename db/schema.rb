@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_14_165842) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_21_012938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "exercise_logs", force: :cascade do |t|
+    t.bigint "workout_log_id", null: false
+    t.bigint "exercise_id", null: false
+    t.string "actual_reps"
+    t.string "actual_weight"
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_exercise_logs_on_exercise_id"
+    t.index ["workout_log_id"], name: "index_exercise_logs_on_workout_log_id"
+  end
 
   create_table "exercises", force: :cascade do |t|
     t.string "name"
@@ -48,6 +60,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_165842) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "workout_logs", force: :cascade do |t|
+    t.bigint "workout_id", null: false
+    t.bigint "member_id", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_workout_logs_on_member_id"
+    t.index ["workout_id"], name: "index_workout_logs_on_workout_id"
+  end
+
   create_table "workouts", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -61,8 +84,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_165842) do
     t.index ["trainer_id"], name: "index_workouts_on_trainer_id"
   end
 
+  add_foreign_key "exercise_logs", "exercises"
+  add_foreign_key "exercise_logs", "workout_logs"
   add_foreign_key "exercises", "workouts"
   add_foreign_key "users", "gyms"
+  add_foreign_key "workout_logs", "users", column: "member_id"
+  add_foreign_key "workout_logs", "workouts"
   add_foreign_key "workouts", "gyms"
   add_foreign_key "workouts", "users", column: "member_id"
   add_foreign_key "workouts", "users", column: "trainer_id"
