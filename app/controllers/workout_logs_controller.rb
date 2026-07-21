@@ -35,7 +35,7 @@ class WorkoutLogsController < ApplicationController
     # O pacotão (Nested Attributes) agora carrega as respostas dos exercícios
     params.require(:workout_log).permit(
       :workout_id,
-      exercise_logs_attributes: [:exercise_id, :actual_reps, :actual_weight, :completed]
+      exercise_logs_attributes: [:exercise_id, :actual_sets, :actual_reps, :actual_weight, :rir, :completed]
     )
   end
 end

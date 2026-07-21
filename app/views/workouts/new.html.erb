@@ -18,33 +18,37 @@
       <%= form.text_field :title, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
     </div>
 
+    <div data-controller="nested-form" class="bg-gray-50 p-4 rounded-md border border-gray-200">
+      <h3 class="text-md font-bold text-gray-900 mb-3">Tabela de Exercícios</h3>
+
+      <!-- TEMPLATE OCULTO: O Stimulus vai copiar este bloco -->
+      <template data-nested-form-target="template">
+        <%= form.fields_for :exercises, Exercise.new, child_index: 'NEW_RECORD' do |exercise_form| %>
+          <%= render "exercise_fields", f: exercise_form %>
+        <% end %>
+      </template>
+
+      <!-- ÁREA ALVO: Onde as 3 linhas iniciais aparecem e onde o JS vai colar as novas -->
+      <div data-nested-form-target="target" class="space-y-3">
+        <%= form.fields_for :exercises do |exercise_form| %>
+          <%= render "exercise_fields", f: exercise_form %>
+        <% end %>
+      </div>
+
+      <!-- RODAPÉ COM O BOTÃO DE ADICIONAR -->
+      <div class="mt-4 flex justify-between items-center border-t border-gray-200 pt-3">
+        <p class="text-xs text-gray-500 italic">* Deixe a linha em branco caso não queira usar todos os espaços.</p>
+
+        <button type="button" data-action="click->nested-form#add" class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold py-2 px-4 rounded border border-gray-300 transition-colors cursor-pointer flex items-center">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Adicionar Exercício
+        </button>
+      </div>
+    </div>
+
     <div>
       <%= form.label :description, "Descrição (Exercícios)", class: "block text-sm font-bold text-gray-900 mb-1" %>
       <%= form.text_area :description, rows: 4, class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2" %>
-    </div>
-
-    <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
-      <h3 class="text-md font-bold text-gray-900 mb-3">Tabela de Exercícios</h3>
-
-      <div class="space-y-3">
-        <%= form.fields_for :exercises do |exercise_form| %>
-          <div class="grid grid-cols-12 gap-2 items-start">
-            <div class="col-span-5">
-              <%= exercise_form.text_field :name, placeholder: "Nome do Exercício", class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2" %>
-            </div>
-            <div class="col-span-2">
-              <%= exercise_form.number_field :sets, placeholder: "Séries", class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2" %>
-            </div>
-            <div class="col-span-2">
-              <%= exercise_form.text_field :reps, placeholder: "Reps", class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2" %>
-            </div>
-            <div class="col-span-3">
-              <%= exercise_form.text_field :weight, placeholder: "Carga", class: "block w-full rounded-md border border-gray-400 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <p class="text-xs text-gray-500 mt-2 italic">* Deixe a linha em branco caso não queira usar todos os espaços.</p>
     </div>
 
     <div class="grid grid-cols-2 gap-4">

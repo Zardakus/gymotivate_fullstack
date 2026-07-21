@@ -28,20 +28,29 @@
               </div>
 
               <!-- Campos de Execução (Anotações do Aluno) -->
-              <div class="flex flex-wrap md:flex-nowrap gap-3 items-end w-full md:w-auto">
-                <div class="flex-1 md:w-24">
-                  <%= exercise_form.label :actual_reps, "Reps Feitas", class: "block text-xs font-bold text-gray-700 mb-1" %>
-                  <%= exercise_form.text_field :actual_reps, placeholder: "Ex: 10", class: "block w-full rounded-md border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-2 text-gray-900 bg-blue-50" %>
+              <div class="flex flex-wrap gap-2 items-end w-full md:w-auto">
+                <div class="flex-1 min-w-[70px]">
+                  <%= exercise_form.label :actual_sets, "Séries", class: "block text-[10px] font-bold text-gray-700 mb-1" %>
+                  <%= exercise_form.number_field :actual_sets, placeholder: "Ex: 3", class: "block w-full rounded-md border border-gray-400 text-sm py-2 px-2 bg-blue-50" %>
                 </div>
 
-                <div class="flex-1 md:w-24">
-                  <%= exercise_form.label :actual_weight, "Peso Usado", class: "block text-xs font-bold text-gray-700 mb-1" %>
-                  <%= exercise_form.text_field :actual_weight, placeholder: "Ex: 20kg", class: "block w-full rounded-md border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-2 text-gray-900 bg-blue-50" %>
+                <div class="flex-1 min-w-[70px]">
+                  <%= exercise_form.label :actual_reps, "Reps / Série", class: "block text-[10px] font-bold text-gray-700 mb-1" %>
+                  <%= exercise_form.number_field :actual_reps, placeholder: "Ex: 10", class: "block w-full rounded-md border border-gray-400 text-sm py-2 px-2 bg-blue-50" %>
                 </div>
 
-                <div class="w-full md:w-16 flex flex-col items-center justify-center bg-gray-100 rounded-md py-1 border border-gray-200">
-                  <%= exercise_form.label :completed, "Feito?", class: "block text-[10px] uppercase font-bold text-gray-500 mb-1" %>
-                  <%= exercise_form.check_box :completed, class: "h-6 w-6 text-green-600 focus:ring-green-500 border-gray-400 rounded cursor-pointer" %>
+                <div class="flex-1 min-w-[70px]">
+                  <%= exercise_form.label :actual_weight, "Peso(kg)", class: "block text-[10px] font-bold text-gray-700 mb-1" %>
+                  <%= exercise_form.number_field :actual_weight, step: "0.5", placeholder: "Ex: 20.5", class: "block w-full rounded-md border border-gray-400 text-sm py-2 px-2 bg-blue-50" %>
+                </div>
+
+                <div class="flex-1 min-w-[90px]">
+                  <%= exercise_form.label :rir, "Esforço (RIR)", title: "Repetições na Reserva: Quantas a mais faria antes da falha?", class: "block text-[10px] font-bold text-gray-700 mb-1 cursor-help" %>
+                  <%= exercise_form.select :rir, [["Falha Total (0)", 0], ["Quase Falha (1)", 1], ["Pesado (2)", 2], ["Moderado (3+)", 3]], { prompt: "Selecione" }, class: "block w-full rounded-md border border-gray-400 text-[11px] py-2 px-1 bg-yellow-50" %>
+                </div>
+
+                <div class="w-12 flex flex-col items-center justify-center bg-gray-100 rounded-md py-1 border border-gray-200 h-[38px]">
+                  <%= exercise_form.check_box :completed, class: "h-5 w-5 text-green-600 border-gray-400 rounded cursor-pointer" %>
                 </div>
               </div>
 

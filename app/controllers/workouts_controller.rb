@@ -121,7 +121,7 @@ class WorkoutsController < ApplicationController
       :description,
       :trainer_id,
       :member_id,
-      exercises_attributes: [:id, :name, :sets, :reps, :_destroy]
+      exercises_attributes: [:id, :name, :muscle_group, :sets, :reps, :weight, :_destroy]
     )
   end
 end

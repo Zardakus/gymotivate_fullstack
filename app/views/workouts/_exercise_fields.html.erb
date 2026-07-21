@@ -1,0 +1,23 @@
+<div class="grid grid-cols-12 gap-1 items-center">
+  <div class="col-span-3">
+    <%= f.text_field :name, placeholder: "Nome", class: "block w-full rounded border border-gray-400 text-xs px-2 py-1" %>
+  </div>
+  <div class="col-span-3">
+    <%= f.select :muscle_group, ["Peito", "Costas", "Pernas", "Ombros", "Braços", "Core", "Cardio"], { prompt: "Músculo" }, class: "block w-full rounded border border-gray-400 text-[11px] px-1 py-1" %>
+  </div>
+  <div class="col-span-2">
+    <%= f.number_field :sets, placeholder: "Séries", class: "block w-full rounded border border-gray-400 text-xs px-2 py-1" %>
+  </div>
+  <div class="col-span-2">
+    <%= f.text_field :reps, placeholder: "Reps", class: "block w-full rounded border border-gray-400 text-xs px-2 py-1" %>
+  </div>
+  <div class="col-span-2 flex items-center justify-between">
+    <%= f.text_field :weight, placeholder: "Carga", class: "block w-full rounded border border-gray-400 text-xs px-2 py-1" %>
+
+    <% if f.object.persisted? %>
+      <div class="ml-2" title="Marque para excluir este exercício">
+        <%= f.check_box :_destroy, class: "h-4 w-4 text-red-600 rounded border-gray-300 cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</div>
